@@ -1,0 +1,30 @@
+<%- include('../partials/_html-start.ejs') %>
+<%- include('../partials/_navbar.ejs') %>
+
+<main class="container my-5">
+  <div class="row">
+    
+  <% if (category.name) { %>
+    <h1 class="h3 mb-3"><span class="text-primary"><%= category.name %></span> Filmleri</h1>
+  <% } %>
+
+  <% if (movies.length !== 0) { %>
+    <% movies.forEach(m => { %>
+      <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-3 mb-3">
+        <a href="/movie-detail/<%= m._id %>">
+          <div class="movie-card">
+            <img src="<%= m.image %>" alt="" class="img-fluid">
+            <h1 class="movie-card-title"><%= m.name %></h1>
+          </div>
+        </a>
+      </div>
+    <% }) %>
+  <% }else{ %>
+    <div class="alert alert-warning">Film Bulunamadı.</div>
+  <% } %>  
+
+  </div>
+</main>
+
+<%- include('../partials/_footer.ejs') %>
+<%- include('../partials/_html-finish.ejs') %>

@@ -1,0 +1,160 @@
+<%- include('../../partials/_admin-start.ejs') %>
+<%- include('../../partials/_sidebar-start.ejs') %>
+
+<div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mb-3">
+  <h1 class="h3">Film Ekle</h1>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form id="addMovieForm" method="POST">
+      <div class="row">
+        <div class="col-lg-9">
+          <div class="mb-3">
+            <label for="image" class="form-label">Resim:</label>
+            <input type="text" id="image" class="form-control">
+            <span id="image_err" class="text-danger"></span>
+          </div>
+    
+          <div class="mb-3">
+            <label for="name" class="form-label">Adı:</label>
+            <input type="text" id="name" class="form-control">
+            <span id="name_err" class="text-danger"></span>
+          </div>
+          
+          <div class="mb-3">
+            <label for="description" class="form-label">Açıklama:</label>
+            <textarea id="description" rows="4" class="form-control"></textarea>
+            <span id="name_err" class="text-danger"></span>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex flex-wrap gap-3">
+              <div style="width: 120px;">
+                <label for="imdb" class="form-label">IMDB:</label>
+                <input type="text" id="imdb" class="form-control">
+                <span id="imdb_err" class="text-danger"></span>
+              </div>
+              <div style="width: 120px;">
+                <label for="publishYear" class="form-label">Yapım Yılı:</label>
+                <input type="text" id="publishYear" class="form-control">
+                <span id="publishYear_err" class="text-danger"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-2 offset-lg-1">
+          <div class="card">
+            <div class="card-header">Kategoriler</div>
+            <div class="card-body">
+              <% categories.forEach(c => { %>
+               <div class="form-check">
+                <label for="category_<%= c.name %>" class="form-check-label"><%= c.name %></label>
+                <input type="checkbox" id="category_<%= c.name %>" class="category form-check-input" value="<%= c._id %>">
+               </div>
+              <% }) %>
+
+              <span id="category_err" class="text-danger"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" id="addMovieBtn" class="btn btn-primary">Film Ekle</button>
+    </form>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  const addMovieForm = document.getElementById("addMovieForm")
+  const addMovieBtn = document.getElementById("addMovieBtn")
+
+  const checkAddMovieForm = () => {
+    const image = document.getElementById("image").value.trim()
+    const name = document.getElementById("name").value.trim()
+    const imdb = document.getElementById("imdb").value.trim()
+    const publishYear = document.getElementById("publishYear").value.trim()
+    const categories = document.querySelectorAll(".category:checked")
+
+    let image_err = document.getElementById("image_err")
+    let name_err = document.getElementById("name_err")
+    let imdb_err = document.getElementById("imdb_err")
+    let publishYear_err = document.getElementById("publishYear_err")
+    let category_err = document.getElementById("category_err")
+
+    image_err.textContent = name_err.textContent = imdb_err.textContent = publishYear_err.textContent = category_err.textContent = "" ;
+
+    if(!image){
+      image_err.textContent = "Resim boş geçilemez";
+    }
+
+    if(!name){
+      name_err.textContent = "Adı boş geçilemez";
+    }
+
+    if(!imdb){
+      imdb_err.textContent = "IMDB boş geçilemez";
+    }else if(!Number(imdb)){
+      imdb_err.textContent = "IMDB sayı içerebilir.";
+    }
+
+    if(!publishYear){
+      publishYear_err.textContent = "Yapım Yılı boş geçilemez";
+    }else if(!Number(publishYear)){
+      publishYear_err.textContent = "Yapım Yılı sayı içerebilir.";
+    }else if(publishYear.length != 4){
+      publishYear_err.textContent = "Geçerli yıl değil.";
+    }
+
+    if(categories.length === 0){
+      category_err.textContent = "Kategori boş geçilemez."
+    }
+
+    if(name_err.textContent || image_err.textContent || imdb_err.textContent || publishYear_err.textContent || category_err.textContent){
+      return false
+    }
+
+    return true
+  }
+
+
+  addMovieForm.addEventListener("submit", async(e) => {
+    e.preventDefault()
+
+    addMovieBtn.disabled = true
+
+    if(checkAddMovieForm()){
+      const image = document.getElementById("image").value.trim()
+      const name = document.getElementById("name").value.trim()
+      const imdb = document.getElementById("imdb").value.trim()
+      const publishYear = document.getElementById("publishYear").value.trim()
+      const description = document.getElementById("description").value.trim()
+      const categoriesChecked = document.querySelectorAll(".category:checked")
+
+      let categories = []
+      categoriesChecked.forEach(cc => categories.push(cc.value))
+
+      const res = await fetch("", {
+          method: "POST",
+          body: JSON.stringify({ image, name, description, imdb, publishYear, categories }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const data = await res.json()
+        
+        console.log(data)
+        if(data === true){
+          window.location.href = "/admin/movies"
+        }
+    }
+
+    addMovieBtn.disabled = false
+  })
+
+
+</script>
+
+<%- include('../../partials/_sidebar-finish.ejs') %>
+<%- include('../../partials/_admin-finish.ejs') %>

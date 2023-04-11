@@ -1,0 +1,119 @@
+<%- include('../../partials/_html-start.ejs') %>
+<%- include('../../partials/_navbar.ejs') %>
+
+<main>
+  <div class="container my-5">
+    <div class="col-lg-6 col-md-9 mx-auto">
+      <div class="card">
+        <div class="card-header">Giriş Yap</div>
+        <div class="card-body">
+          <div class="alert alert-warning">
+            <h5 class="fw-bold">Admin girişi için:</h5>
+            <p class="mb-0"><span class="fw-bold">Email:</span> admin@gmail.com</p>
+            <p class="mb-0"><span class="fw-bold">Parola:</span> admin1</p>
+          </div>
+          <div id="login_form_err" class="alert alert-danger"></div>
+
+          <form id="loginForm" method="POST">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email:</label>
+              <input value="admin@gmail.com" type="text" name="email" id="email" class="form-control">
+              <span id="email_err" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+              <label for="password" class="form-label">Parola:</label>
+              <input value="admin1" type="password" name="password" id="password" class="form-control">
+              <span id="password_err" class="text-danger"></span>
+            </div>
+
+            <button type="submit" id="loginBtn" class="btn btn-primary">Giriş Yap</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<!-- register form -->
+<script type="text/javascript">
+  const loginForm = document.getElementById("loginForm")
+  const loginBtn = document.getElementById("loginBtn")
+  let login_form_err = document.getElementById("login_form_err")
+  login_form_err.style.display = "none"
+
+  const checkLoginForm = () => {
+    const email = document.getElementById("email").value.trim()
+    const password = document.getElementById("password").value.trim()
+
+    let email_err = document.getElementById("email_err")
+    let password_err = document.getElementById("password_err")
+
+    email_err.textContent = password_err.textContent = "";
+    login_form_err.style.display = "none"
+
+    const emailValidRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if(!email){
+      email_err.textContent = "Email boş geçilemez."
+    }else if(!email.match(emailValidRegex)){
+      email_err.textContent = "Email geçerli değil."
+    }
+
+    if(!password){
+      password_err.textContent = "Parola boş geçilemez."
+    }
+
+    if(email_err.textContent || password_err.textContent){
+      return false
+    }
+
+    return true
+  }
+
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
+
+    loginBtn.disabled = true;
+
+    if(checkLoginForm()){
+      try{
+        const email = document.getElementById("email").value.trim()
+        const password = document.getElementById("password").value.trim()
+
+        const res = await fetch("", {
+          method: "POST",
+          body: JSON.stringify({ email, password }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const data = await res.json()
+        console.log(data)
+
+        if(data === true){
+          window.location.href = "/"
+        }
+
+        if(data.email){
+          let email_err = document.getElementById("email_err")
+          email_err.textContent = data.email
+        }
+
+        if(data.error){
+          let login_form_err = document.getElementById("login_form_err")
+          login_form_err.style.display = "block"
+          login_form_err.textContent = data.error
+        }
+
+        console.log("login btn false yap")
+      }catch(err){
+        console.log(`Login form submit error: ${err}`)
+      }
+    }
+    
+    loginBtn.disabled = false;
+  })
+</script>
+
+<%- include('../partials/_footer.ejs') %>
+<%- include('../../partials/_html-finish.ejs') %>

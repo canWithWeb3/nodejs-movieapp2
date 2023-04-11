@@ -1,0 +1,28 @@
+.sidebar{
+  width: 240px;
+  height: 100vh;
+  position: sticky;
+  top:0;
+  left:0;
+}
+
+main{
+  background-color: #F1F4F6;
+  height: 100%;
+}
+
+.sidebar-menu ul li a{
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  display: block;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-menu ul li a:hover{
+  background-color: white;
+  color: #0D6EFD;
+}

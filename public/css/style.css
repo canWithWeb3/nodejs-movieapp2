@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+main{
+  min-height: 80vh;
+}
+
+.bg-black{
+  background-color: black;
+}
+
+.movie-card{
+  overflow: hidden;
+  position: relative;
+  border-radius: 10px !important;
+}
+
+.movie-video, .movie-image, .br-25{
+  border-radius: 10px !important;
+}
+
+.movie-detail p{
+  font-size: 17.5px;
+  margin-bottom: 6px;
+}
+
+.movie-detail p span{
+  display: inline-block;
+  width: 100px !important;
+  font-weight: bold;
+}
+
+.movie-card-title{
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 20px;
+  color: white;
+}

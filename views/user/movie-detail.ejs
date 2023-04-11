@@ -1,0 +1,38 @@
+<%- include('../partials/_html-start.ejs') %>
+<%- include('../partials/_navbar.ejs') %>
+
+<main class="container my-5">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="h2"><%= movie.name %></h1>
+    <div>
+      <a href="" class="btn btn-warning">Fragman</a>
+      <a href="" class="btn btn-secondary">Altyazılı</a>
+      <a href="" class="btn btn-secondary">Dublajlı</a>
+    </div>
+  </div>
+
+  <iframe width="100%" height="555" class="movie-video my-2 mb-4"
+    src="https://www.youtube.com/embed/tgbNymZ7vqY">
+  </iframe>
+
+  
+
+  <div class="d-flex">
+    <img width="220" src="<%= movie.image %>" alt="" class="movie-image img-fluid d-md-inline-block d-none">
+    <div class="movie-detail px-3">
+      <p><span>IMDB</span>: <%= movie.imdb %></p>
+      <p><span>Tür</span>: 
+        <% movie.categories.forEach(c => { %>
+          <a href="/category/<%= c._id %>"><%= c.name %>,</a> 
+        <% }) %>
+      </p>
+      <p><span>Yapım Yılı</span>: <%= movie.publishYear %></p>
+      <!-- <p><span>Yönetmen</span>: 8.2</p>
+      <p><span>Oyuncular</span>: 8.2</p> -->
+      <p><span>Film Özeti</span>: <%= movie.description %></p>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/_footer.ejs') %>
+<%- include('../partials/_html-finish.ejs') %>

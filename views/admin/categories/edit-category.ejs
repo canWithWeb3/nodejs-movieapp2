@@ -1,0 +1,75 @@
+<%- include('../../partials/_admin-start.ejs') %>
+<%- include('../../partials/_sidebar-start.ejs') %>
+
+<div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mb-3">
+  <h1 class="h3">Kategori Güncelle</h1>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form id="editCategoryForm" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Adı:</label>
+        <input type="text" id="name" class="form-control" value="<%= category.name %>">
+        <span id="name_err" class="text-danger"></span>
+      </div>
+
+      <button type="submit" id="editCategoryBtn" class="btn btn-primary">Kategori Güncelle</button>
+    </form>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  const editCategoryForm = document.getElementById("editCategoryForm")
+  const editCategoryBtn = document.getElementById("editCategoryBtn")
+
+  const checkEditCategoryForm = () => {
+    const name = document.getElementById("name").value.trim()
+
+    let name_err = document.getElementById("name_err")
+
+    name_err.textContent = "";
+
+    if(!name){
+      name_err.textContent = "Adı boş geçilemez";
+    }
+
+    if(name_err.textContent){
+      return false
+    }
+
+    return true
+  }
+
+
+  editCategoryForm.addEventListener("submit", async(e) => {
+    e.preventDefault()
+
+    editCategoryBtn.disabled = true
+
+    if(checkEditCategoryForm()){
+      const name = document.getElementById("name").value.trim()
+
+      const res = await fetch("", {
+          method: "POST",
+          body: JSON.stringify({ name }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const data = await res.json()
+        
+        console.log(data)
+        if(data === true){
+          window.location.href = "/admin/categories"
+        }
+    }
+
+    editCategoryBtn.disabled = false
+  })
+
+
+</script>
+
+<%- include('../../partials/_sidebar-finish.ejs') %>
+<%- include('../../partials/_admin-finish.ejs') %>
